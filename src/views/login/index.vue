@@ -3,33 +3,33 @@
     <div class="login_form">
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
         <h3 class="title">后台管理系统</h3>
-        <el-form-item prop="name" size="small">
+        <el-form-item prop="username" size="small">
           <el-input
             placeholder="请输入用户名"
             prefix-icon="iconfont icon-user"
-            v-model="loginForm.name"
+            v-model="loginForm.username"
           >
           </el-input>
         </el-form-item>
-        <el-form-item prop="pass" size="small">
+        <el-form-item prop="password" size="small">
           <el-input
             placeholder="请输入密码"
             prefix-icon="iconfont icon-suo"
-            v-model="loginForm.pass"
+            v-model="loginForm.password"
             type="password"
           >
           </el-input>
         </el-form-item>
-        <el-form-item size="small" prop="identify">
+        <el-form-item size="small" prop="code">
           <el-input
             placeholder="验证码"
             prefix-icon="iconfont icon-validCode"
-            v-model="loginForm.identify"
+            v-model="loginForm.code"
             style="width: 63%"
           >
           </el-input>
           <div class="login-code" @click="changeAuthCode">
-            <img :src="authCode.img" alt="验证码" />
+            <img :src="authImg" alt="验证码" />
           </div>
         </el-form-item>
         <el-form-item size="small">
@@ -45,64 +45,65 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { reqAuthCode, reqAuthLogin } from '@/apis'
 import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'Login',
   data () {
     return {
       loginForm: {
-        name: 'admin',
-        pass: '',
-        identify: '',
-        checked: false
+        username: 'admin', // 用户名
+        password: '',
+        code: '', // 验证码
+        checked: false,
+        uuid: null
       },
       loginFormRules: {
-        name: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-        pass: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
-        identify: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-      }
+        username: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' }
+        ],
+        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+      },
+      authImg: null
     }
   },
   methods: {
     // 更换验证码
-    changeAuthCode () {
-      this.$store.dispatch('getAuthCode')
+    async changeAuthCode () {
+      // 获取验证码图片信息
+      const { img, uuid } = await reqAuthCode()
+      this.authImg = img
+      this.loginForm.uuid = uuid
     },
     // 登录
-    /* 登录的传递的参数
-        {
-        "code": "string",
-        "password": "string",
-        "username": "string",
-        "uuid": "string"
-      } */
-    async authLogin () {
-      try {
-        const result = await this.$store.dispatch('getAuthLogin', {
-          code: this.loginForm.identify,
-          password: encrypt(this.loginForm.pass),
-          username: this.loginForm.name,
-          uuid: this.authCode.uuid
-        })
-        console.log(result)
-        if (result === 'ok') {
-          this.$message.success('登录成功')
-          this.$router.push('/home')
-        }
-      } catch (error) {
-        this.$message.warning(error)
-      }
+    authLogin () {
+      this.$refs.loginFormRef.validate((valid) => {
+        if (!valid) return false
+        /**
+         * 1 本地存储 localStore seesion cookie
+         * 2 json格式化和json转字符串
+         */
+        const loginFormCopy = JSON.parse(JSON.stringify(this.loginForm))
+        // 深拷贝用户数据,要不用户的密码会边长
+        loginFormCopy.password = encrypt(this.loginForm.password)
+        reqAuthLogin(loginFormCopy)
+          .then((res) => {
+            // console.log(res)
+            localStorage.setItem('token', res.token)
+            localStorage.setItem('user', JSON.stringify(res.user))
+            this.$router.push('/')
+          })
+          .catch()
+      })
     }
   },
   mounted () {
-    this.$store.dispatch('getAuthCode')
+    this.changeAuthCode()
   },
-  computed: {
-    ...mapState({
-      authCode: (state) => state.authCode
-    })
-  }
+  computed: {}
 }
 </script>
 

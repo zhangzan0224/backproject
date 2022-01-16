@@ -1,7 +1,9 @@
 import axios from 'axios'
+// 导入elemntui 中的通知模块
+import { Notification } from 'element-ui'
 // 创建一个axios实例
 const requests = axios.create({
-  timeout: 1000
+  timeout: 3000
 })
 // 添加请求拦截器
 requests.interceptors.request.use(
@@ -19,9 +21,19 @@ requests.interceptors.request.use(
 requests.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
-    return response
+    return response.data
   },
   function (error) {
+    // console.dir(error) // 可以类似于对象的打开
+    const { message, status } = error.response.data
+    if (status === 400) {
+      Notification({
+        title: '错误',
+        message,
+        type: 'error'
+      })
+      return
+    }
     // 对响应错误做点什么
     return Promise.reject(error)
   }

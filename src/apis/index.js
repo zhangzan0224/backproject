@@ -1,6 +1,6 @@
 import requests from '@/utils/requests'
 // 获取验证码
-export const reqAuthCode = (_) =>
+export const reqAuthCode = () =>
   requests({
     url: '/auth/code'
   })

@@ -12,8 +12,11 @@ import '@/style/index.scss'
 // 注册使用element插件
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-new Vue({
+const vm = new Vue({
   router,
   store,
-  render: (h) => h(App)
+  render: (h) => h(App),
+  beforeCreate () {
+    Vue.prototype.$bus = this // 安装全局事件总线
+  }
 }).$mount('#app')

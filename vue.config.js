@@ -1,6 +1,7 @@
 module.exports = {
   css: {
     loaderOptions: {
+      // !向预处理器 Loader 传递选项 参考网址 https://cli.vuejs.org/zh/guide/css.html#css-modules
       // !可以让scss文件使用全局中的变量,这样只需要把全局变量单个文件进行修改就好
       // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
       // 因为 `scss` 语法在内部也是由 sass-loader 处理的

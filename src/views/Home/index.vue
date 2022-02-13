@@ -6,16 +6,9 @@
 </template>
 
 <script>
-import { reqGetUsers } from '@/apis/users.js'
 export default {
   name: 'Home',
-  mounted () {
-    reqGetUsers()
-      .then((result) => {
-        console.log(result)
-      })
-      .catch()
-  }
+  mounted () {}
 }
 </script>
 

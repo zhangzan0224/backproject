@@ -40,7 +40,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- <img :src="imgurl" alt="" @click="changeAuthCode" /> -->
   </div>
 </template>
 
@@ -107,11 +106,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login {
   width: 100%;
   height: 100%;
-  background: url('../../../public/images/background.jpg');
+  background: url('~@/assets/background.jpg');
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */

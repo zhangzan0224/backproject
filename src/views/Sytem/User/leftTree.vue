@@ -88,7 +88,7 @@ export default {
     },
     // 树状图点击
     handleTreeNodeClick (data, b, c) {
-      // console.log(data)
+      console.log(data)
       this.searchParams.deptId = data.id
       this.$store.dispatch('getUsersList', this.searchParams)
     }

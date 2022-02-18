@@ -199,26 +199,25 @@ export default {
   },
   watch: {},
   mounted () {
-    this.getUsersList()
+    this.getUsersList(this.searchParams)
   },
   methods: {
     handleClick () {
       // console.log(11)
     },
-    getUsersList () {
-      this.$store.dispatch('getUsersList', this.searchParams)
-      // this.usersList = result.content
-      // this.total = result.totalElements
+    getUsersList (params) {
+      // console.log('@挂载的时候', params)
+      this.$store.dispatch('getUsersList', params)
     },
     handleSizeChange (val) {
       // console.log(`每页 ${val} 条`)
       this.searchParams.size = val
-      this.getUsersList()
+      this.getUsersList(this.searchParams)
     },
     handleCurrentChange (val) {
       // console.log(`当前页: ${val}`)
       this.searchParams.page = val - 1
-      this.getUsersList()
+      this.getUsersList(this.searchParams)
     },
     handlerSelect (val) {
       this.searchParams.enabled = val
@@ -227,13 +226,13 @@ export default {
       this.searchParams.blurry = ''
       this.searchParams.enabled = undefined
       this.searchParams.page = 0
-      this.getUsersList()
+      this.getUsersList(this.searchParams)
     },
     // switch 开关进行修改
     async handleSwitchChange (val) {
       await this.$api.users.reqUpdateUser(val)
       // 重新获取数据
-      this.getUsersList()
+      this.getUsersList(this.searchParams)
     }
   }
 }

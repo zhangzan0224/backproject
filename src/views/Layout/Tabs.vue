@@ -12,6 +12,7 @@
       :name="item.name"
       :closable="item.name !== '/home'"
     >
+      <span slot="label"><i class="el-icon-location"></i>{{ item.title }}</span>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -110,6 +111,9 @@ export default {
 }
 ::v-deep .el-tabs__item {
   background-color: white;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 5px;
   color: black;
   font-size: 14px;
   margin-right: 6px;

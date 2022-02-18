@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { reqAuthCode, reqAuthLogin } from '@/apis'
 import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'Login',
@@ -73,7 +72,7 @@ export default {
     // 更换验证码
     async changeAuthCode () {
       // 获取验证码图片信息
-      const { img, uuid } = await reqAuthCode()
+      const { img, uuid } = await this.$api.users.reqAuthCode()
       this.authImg = img
       this.loginForm.uuid = uuid
     },
@@ -88,7 +87,8 @@ export default {
         const loginFormCopy = JSON.parse(JSON.stringify(this.loginForm))
         // 深拷贝用户数据,要不用户的密码会边长
         loginFormCopy.password = encrypt(this.loginForm.password)
-        reqAuthLogin(loginFormCopy)
+        this.$api.users
+          .reqAuthLogin(loginFormCopy)
           .then((res) => {
             // console.log(res)
             localStorage.setItem('token', res.token)

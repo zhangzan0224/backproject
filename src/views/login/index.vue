@@ -95,7 +95,7 @@ export default {
             localStorage.setItem('user', JSON.stringify(res.user))
             this.$router.push('/')
           })
-          .catch()
+          .catch(err => err)
       })
     }
   },

@@ -20,7 +20,7 @@ export const state = {
     'createTime[0].timezoneOffset': undefined,
     'createTime[0].year': undefined,
     deptId: undefined,
-    deptIds: [],
+    deptIds: [7, 24],
     enabled: undefined,
     id: undefined,
     page: 0,
@@ -43,9 +43,7 @@ export const mutations = {
 }
 export const actions = {
   async getUsersList ({ commit }, params) {
-    console.log(params)
     const result = await $api.users.reqGetUsersList(params)
-    // console.log(result)
     commit('GET_USERS_LIST', result.content)
     commit('GET_USERS_LIST_COUNT', result.totalElements)
   }

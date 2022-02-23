@@ -1,5 +1,5 @@
 import requests from '@/utils/requests'
-
+var qs = require('qs')
 // 获取验证码
 export const reqAuthCode = () =>
   requests({
@@ -12,12 +12,15 @@ export const reqAuthLogin = (data) =>
     data,
     method: 'post'
   })
-export const reqGetUsersList = (params) =>
-  requests({
+export const reqGetUsersList = (params) => {
+  params = qs.stringify(params, { arrayFormat: 'repeat' })
+  // console.log('@@@', params)
+  return requests({
     method: 'get',
-    url: '/api/users',
-    params
+    url: '/api/users?' + params
   })
+}
+
 // 修改用户
 export const reqUpdateUser = (data) =>
   requests({
@@ -27,4 +30,12 @@ export const reqUpdateUser = (data) =>
     // headers: {
     //   'Content-Type': 'application/json'
     // }
+  })
+// 删除用户 DELETE api/users
+
+export const reqDeleteUser = (data) =>
+  requests({
+    url: 'api/users',
+    data,
+    method: 'delete'
   })

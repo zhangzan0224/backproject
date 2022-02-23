@@ -40,7 +40,7 @@ export default {
   components: {},
   data () {
     return {
-      isCollapse: false,
+      isCollapse: false, // 是否折叠
       isFullscreen: false // 默认不全屏
     }
   },
@@ -57,7 +57,7 @@ export default {
   mounted () {},
   methods: {
     fullScreen () {
-      // 先使用screenfull.enabled方法判断是否支持screenfull
+      // !先使用screenfull.enabled方法判断是否支持screenfull
       // 如果不允许进入全屏，发出不允许提示 浏览器不能全屏
       if (!screenfull.enabled) {
         this.$message({

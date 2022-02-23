@@ -52,7 +52,7 @@ export default {
     return {
       isCollapse: false, // 默认不折叠
       defaultActive: localStorage.getItem('active') || '/home', // 默认激活链接 需要持久化
-      // #region
+      // #region 菜单
       menuList: [
         {
           alwaysShow: true,
@@ -453,15 +453,17 @@ export default {
     }
   },
   mounted () {
+    // 全局事件总线,绑定一个changeIsCollapse事件,收到其他组件的值,来更改当前组件的值
     this.$bus.$on('changeIsCollapse', (isCollapse) => {
       this.isCollapse = isCollapse
     })
   },
   methods: {
     menuClick (menu, menuchild) {
+      // console.log('@@', menu)
       const arr = []
-      arr.push(menu.meta.title)
-      arr.push(menuchild.meta.title)
+      arr.push(menu?.meta?.title)
+      arr.push(menuchild?.meta?.title)
       // console.log(obj)
       this.$store.commit('SET_SECOND_AND_THIRD_MENU', arr)
     }

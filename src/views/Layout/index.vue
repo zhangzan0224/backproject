@@ -14,7 +14,6 @@
 </template>
 
 <script>
-// import { reqGetUsers } from '@/apis/users.js'
 import { reqBuildMemu } from '@/apis/menus.js'
 import Myaside from '@/views/Layout/Aside'
 import Myheader from '@/views/Layout/Header'

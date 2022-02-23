@@ -350,7 +350,7 @@ export default {
         children: 'children',
         isLeaf: 'leaf'
       }
-      // 搜索参数
+      // // 搜索参数
       // searchParams: Object.assign({}, searchParams)
     }
   },
@@ -372,7 +372,7 @@ export default {
   methods: {
     // 获取用户列表数据
     getUsersList () {
-      console.log(this.searchParams)
+      // console.log(this.searchParams)
       this.$store.dispatch('getUsersList', this.searchParams)
     },
     updateUser (user) {
@@ -403,6 +403,7 @@ export default {
       // 将默认参数定义成常量
       // !合并参数,为什么前面是一个空对象呢,这样这个对象上门都会存在getter和 setter
       this.searchParams = Object.assign({}, searchParams)
+      console.log(this.searchParams)
       this.getUsersList()
     },
     // switch 开关进行修改

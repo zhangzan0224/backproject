@@ -6,12 +6,15 @@
       prefix-icon="el-icon-search"
       v-model="filterText"
       clearable
+      @change="search"
+      @clear="clear"
     >
     </el-input>
     <!-- 树状图        -->
     <el-tree
       :props="treeProps"
       :load="loadNode"
+      :data="treeData"
       lazy
       ref="tree"
       node-key="id"
@@ -22,8 +25,8 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
-// // 引入防抖函数
+import { mapMutations, mapState } from 'vuex'
+// 引入防抖函数
 // import debounce from 'lodash/debounce'
 export default {
   name: 'leftTree',
@@ -39,14 +42,13 @@ export default {
         children: 'hasChildren', // 指定子树为节点对象的某个属性值
         isLeaf: 'leaf' //! 指定子树为节点对象的某个属性值,需要两个属性可以提前告知tree的节点是否为叶子节点,避免了叶子节点前渲染下拉按钮
       },
-      filterArr: []
+      filterArr: [],
+      treeData: []
     }
   },
   // 计算属性
   computed: {
-    ...mapState({
-      searchParams: (state) => state.user.searchParams
-    })
+    ...mapState('user', ['deptId', 'deptIds'])
   },
   watch: {
     // 观察,当它变化时候,tree执行filter
@@ -55,34 +57,48 @@ export default {
       this.$refs.tree.filter(val)
     },
     filterArr (newval) {
-      this.searchParams.deptIds = newval
-      // console.log('新的', this.searchParams.deptIds)
-      this.$store.dispatch('getUsersList', this.searchParams)
+      setTimeout(() => {
+        this.SET_USER_DEPT_IDS(newval)
+      }, 100)
     }
   },
   mounted () {},
   methods: {
-    search () {
-      // console.log('搜索')
+    async clear () {
+      const { content } = await this.$api.department.reqGetDept({})
+      this.treeData = content
+    },
+    async search () {
+      const { content } = await this.$api.department.reqGetDept({
+        name: this.filterText
+      })
+      // console.log(content)
+      this.treeData = content
     },
     async loadNode (node, resolve) {
       // !node.data 得到点击的数据
-      /*   复杂写法    if (node.level === 0) {
-        const { content } = await this.$api.department.reqGetDept()
-        return resolve(content)
-      } else {
-        const { content } = await this.$api.department.reqGetDept({
-          pid: node.data.id
-        })
-        return resolve(content)
-      } */
+      // 复杂写法
+      // console.log(resolve)
+      // if (node.level === 0) {
+      //   const { content } = await this.$api.department.reqGetDept()
+      //   // console.log(content)
+      //   setTimeout(() => {
+      //     return resolve(content)
+      //   }, 100)
+      // } else {
+      //   const { content } = await this.$api.department.reqGetDept({
+      //     pid: node.data.id
+      //   })
+      //   setTimeout(() => {
+      //     return resolve(content)
+      //   }, 100)
+      // }
       try {
         const { content } = await this.$api.department.reqGetDept({
-          pid: node.data?.id, // !es6的写法,node.data是否存在,存在的话就可以.id,当等级是0的时候,node.data是undefined的,新增链式运算符 https://es6.ruanyifeng.com/#docs/operator,
-          name: this.filterText
+          pid: node.data?.id // !es6的写法,node.data是否存在,存在的话就可以.id,当等级是0的时候,node.data是undefined的,新增链式运算符 https://es6.ruanyifeng.com/#docs/operator,
         })
-        // console.log(content)
-        // 延迟展示,否则会出现闪动
+        //   // console.log(content)
+        //  延迟展示,否则会出现闪动
         setTimeout(() => {
           return resolve(content)
         }, 100)
@@ -99,12 +115,10 @@ export default {
       }
       return node.data.name.indexOf(value) !== -1
     },
-
+    ...mapMutations('user', ['SET_USER_DEPT_ID', 'SET_USER_DEPT_IDS']),
     // 树状图点击
-    handleTreeNodeClick (node) {
-      // console.log(node)
-      this.searchParams.deptId = node.id
-      this.$store.dispatch('getUsersList', this.searchParams)
+    handleTreeNodeClick (data) {
+      this.SET_USER_DEPT_ID(data.id)
     }
   }
 }

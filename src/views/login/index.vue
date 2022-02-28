@@ -51,7 +51,7 @@ export default {
     return {
       loginForm: {
         username: 'admin', // 用户名
-        password: '',
+        password: 'web46yyds',
         code: '', // 验证码
         checked: false,
         uuid: null
@@ -95,7 +95,7 @@ export default {
             localStorage.setItem('user', JSON.stringify(res.user))
             this.$router.push('/')
           })
-          .catch(err => err)
+          .catch((err) => err)
       })
     }
   },

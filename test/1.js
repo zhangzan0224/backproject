@@ -32,3 +32,23 @@ clearTimeout(timer)
 setTimeout(() => {
   console.log('@@@', !timer)
 }, 1000)
+var result =
+  100 + true + 21.2 + null + undefined + 'Tencent' + [] + null + 9 + false
+console.log(result)
+var num = 5
+var a = (5 && ++num && 7 > 8) || 8 > 7 || !9
+console.log(a)
+// function foo() {
+//   console.log(2)
+// }
+// var foo
+// foo()
+// foo = function () {
+//   console.log(1)
+// }
+// foo()
+// foo()
+var foo = []
+foo.push(1)
+foo.push(2)
+console.log('@', foo.length)

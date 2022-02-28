@@ -11,7 +11,7 @@
       </el-input>
       <!-- 日期选择器 -->
       <el-date-picker
-        v-model="value2"
+        v-model="dataPickerVal"
         type="datetimerange"
         prefix-icon="el-icon-date"
         editable
@@ -52,11 +52,7 @@
     </div>
     <!-- 按钮区域 -->
     <div class="buttonArea">
-      <el-button
-        type="success"
-        icon="el-icon-plus"
-        @click="addOrUpdatedialogFormVisible = true"
-      >
+      <el-button type="success" icon="el-icon-plus" @click="addUser">
         新增
       </el-button>
       <el-button type="warning" icon="el-icon-edit">修改</el-button>
@@ -148,96 +144,15 @@
       >
       </el-pagination>
     </div>
-    <!-- 新增用户和修改用户对话框 -->
-    <el-dialog title="新增用户" :visible.sync="addOrUpdatedialogFormVisible">
-      <el-form :inline="true" v-model="addOrUpdateForm" label-width="100px">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="addOrUpdateForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="addOrUpdateForm.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="addOrUpdateForm.nickName"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addOrUpdateForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="部门">
-          <el-select
-            v-model="addOrUpdateForm.dept"
-            multiple
-            filterable
-            remote
-            reserve-keyword
-            placeholder="请输入部门"
-          >
-            <el-option
-              v-for="item in treeData"
-              :key="item.id"
-              :label="item.label"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="岗位">
-          <el-select
-            placeholder="选择岗位"
-            v-model="addOrUpdateForm.jobs.name"
-            style="width: 180px"
-          >
-            <el-option label="区域一" value="shanghai"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-radio-group v-model="addOrUpdateForm.gender" style="width: 180px">
-            <el-radio label="男" value="男">男</el-radio>
-            <el-radio label="女" vlaue="女">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group
-            v-model="addOrUpdateForm.enabled"
-            style="width: 180px"
-          >
-            <el-radio :label="true" :value="true">激活</el-radio>
-            <el-radio :label="false" :value="false">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="角色">
-          <el-select
-            v-model="addOrUpdateForm.roles"
-            style="width: 250%"
-            placeholder="请选择"
-            multiple
-          >
-            <el-option
-              :label="role.name"
-              :value="role.id"
-              v-for="role in allRolesList"
-              :key="role.id"
-              :data-dataScope="role.dataScope"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button
-          @click="addOrUpdatedialogFormVisible = false"
-          style="border: none; outline: none"
-          >取 消</el-button
-        >
-        <el-button type="primary" @click="addOrUpdatedialogFormVisible = false"
-          >确 定</el-button
-        >
-      </div>
-    </el-dialog>
+    <AddOrUpdateUser
+      ref="addOrUpdateFormRef"
+      v-on:updateuserlist="resetSearchParams"
+    ></AddOrUpdateUser>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
+import AddOrUpdateUser from './addOrUpdateUser.vue'
 // 导入深拷贝
 import cloneDeep from 'lodash/cloneDeep'
 // 初始的搜索参数
@@ -259,13 +174,14 @@ const searchParams = {
   id: undefined,
   page: 0,
   size: 10,
-  sort: ['id,asc']
+  sort: ['id,desc']
 }
 export default {
   name: 'rightTable',
-  components: {},
+  components: { AddOrUpdateUser },
   data () {
     return {
+      // 日期pick
       pickerOptions: {
         shortcuts: [
           {
@@ -297,8 +213,8 @@ export default {
           }
         ]
       },
-      value2: '',
-      selectValue: '', // 选择器的值
+      dataPickerVal: '',
+      // 下拉选择,激活与未激活
       options: [
         {
           value: true,
@@ -309,76 +225,53 @@ export default {
           label: '锁定'
         }
       ],
-      // 全局角色数组
-      allRolesList: [],
-      addOrUpdatedialogFormVisible: false, // 对话框的状态
-      // 添加或者修改的表单数据
-      addOrUpdateForm: {
-        dept: {
-          // deptSort: 0,
-          // enabled: true,
-          // name: 'string',
-          // pid: 0,
-          // roles: []
-        },
-        email: '',
-        enabled: true,
-        gender: '男',
-        jobs: [
-          // {
-          //   enabled: true,
-          //   jobSort: 0,
-          //   name: 'string'
-          // }
-        ],
-        nickName: '',
-        password: 'string',
-        phone: '',
-        roles: [
-          // {
-          // dataScope: 'string',
-          // description: 'string',
-          // level: 0
-          // }
-        ],
-        username: ''
-      },
-      // 部门
-      treeData: [],
-      treeProps: {
-        label: 'name',
-        children: 'children',
-        isLeaf: 'leaf'
-      }
-      // // 搜索参数
-      // searchParams: Object.assign({}, searchParams)
+      // 搜索参数
+      searchParams: Object.assign({}, searchParams),
+      // 用户列表
+      usersList: [],
+      // 用户列表总数
+      total: 1
     }
   },
   // 计算属性
   computed: {
     ...mapState({
-      usersList: (state) => state.user.usersList,
-      total: (state) => state.user.total,
-      searchParams: (state) => state.user.searchParams
+      deptId: (state) => state.user.deptId,
+      deptIds: (state) => state.user.deptIds
     })
   },
-  watch: {},
+  watch: {
+    deptId (newVal) {
+      this.searchParams.deptId = newVal
+      this.getUsersList()
+    },
+    deptIds (newVal) {
+      this.searchParams.deptIds = newVal
+      this.getUsersList()
+    }
+  },
   mounted () {
     // 获取用户列表
     this.getUsersList()
-    // 获取全局角色
-    this.getAllRoles()
   },
   methods: {
     // 获取用户列表数据
     getUsersList () {
       // console.log(this.searchParams)
-      this.$store.dispatch('getUsersList', this.searchParams)
+      this.$api.users.reqGetUsersList(this.searchParams).then((res) => {
+        this.usersList = res.content
+        this.total = res.totalElements
+      })
     },
     updateUser (user) {
-      // console.log(user)
-      this.addOrUpdateForm = cloneDeep(user)
-      this.addOrUpdatedialogFormVisible = true
+      this.$refs.addOrUpdateFormRef.initSelectTree()
+      const obj = cloneDeep(user)
+      obj.jobs = obj.jobs.map((item) => item.id)
+      obj.roles = obj.roles.map((item) => item.id)
+      delete obj.dept.name
+      console.log(obj)
+      this.$refs.addOrUpdateFormRef.addOrUpdateFormData = obj
+      this.$refs.addOrUpdateFormRef.addOrUpdatedialogFormVisible = true
     },
     // 点击搜索时候的事件
     searchUser () {
@@ -386,15 +279,17 @@ export default {
       this.searchParams.page = 0
       this.getUsersList()
     },
-
+    // 页码变化
     handleSizeChange (size) {
       this.searchParams.size = size
       this.getUsersList()
     },
+    // 页面size发生变化
     handleCurrentChange (page) {
       this.searchParams.page = page - 1
       this.getUsersList()
     },
+    //  选择器修改的时候,回调函数
     handlerSelect (enabled) {
       this.searchParams.enabled = enabled
     },
@@ -403,7 +298,6 @@ export default {
       // 将默认参数定义成常量
       // !合并参数,为什么前面是一个空对象呢,这样这个对象上门都会存在getter和 setter
       this.searchParams = Object.assign({}, searchParams)
-      console.log(this.searchParams)
       this.getUsersList()
     },
     // switch 开关进行修改
@@ -440,16 +334,9 @@ export default {
           })
         })
     },
-    // 获取全部角色
-    async getAllRoles () {
-      const result = await this.$api.role.reqAllRoles()
-      // console.log(result)
-      this.allRolesList = result
-    },
+
     // 删除用户
     deletUser (row) {
-      // console.log(row.id)
-      // console.log(row)
       this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -458,7 +345,11 @@ export default {
         .then(async () => {
           // 发请求删除用户
           await this.$api.users.reqDeleteUser([row.id])
-          this.getUsersList(this.searchParams)
+          // 重新获取数据,需要判断删除之后的
+          if (this.usersList.length < 1) {
+            this.searchParams.page = this.searchParams.page - 1
+          }
+          this.getUsersList()
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -470,6 +361,11 @@ export default {
             message: '已取消删除'
           })
         })
+    },
+
+    // 点击增加按钮 需解决数据回显
+    addUser () {
+      this.$refs.addOrUpdateFormRef.addOrUpdatedialogFormVisible = true
     }
   }
 }

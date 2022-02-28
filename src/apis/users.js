@@ -39,3 +39,11 @@ export const reqDeleteUser = (data) =>
     data,
     method: 'delete'
   })
+
+// 新增用户/api/users
+export const reqAddUser = (data) =>
+  requests({
+    url: 'api/users',
+    data,
+    method: 'post'
+  })

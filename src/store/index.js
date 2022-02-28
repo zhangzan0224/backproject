@@ -1,23 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// 导入用户管理js
-import user from './user'
-
+import modules from './modules'
+import mutations from './mutations'
+import actions from './actions'
+import state from './state'
+import getters from './getters'
 Vue.use(Vuex)
 export default new Vuex.Store({
-  state: {
-    // 二三级菜单
-    secondAndThirdMenu: JSON.parse(localStorage.getItem('menu')) || []
-  },
-  mutations: {
-    SET_SECOND_AND_THIRD_MENU (state, secondAndThirdMenu) {
-      // console.log(secondAndThirdMenu)
-      state.secondAndThirdMenu = secondAndThirdMenu
-      localStorage.setItem('menu', JSON.stringify(state.secondAndThirdMenu))
-    }
-  },
-  actions: {},
-  modules: {
-    user
-  }
+  state,
+  mutations,
+  actions,
+  modules,
+  getters,
+  strict: process.env.NODE_ENV !== 'production'
 })

@@ -6,9 +6,12 @@ import * as menus from './menus'
 import * as department from '@/apis/department'
 // 导入角色模块
 import * as role from '@/apis/role'
+// 导入岗位模块
+import * as jobs from '@/apis/jobs'
 export default {
   users,
   menus,
   department,
-  role
+  role,
+  jobs
 }

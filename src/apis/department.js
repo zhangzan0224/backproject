@@ -2,7 +2,7 @@
 // 查询部门 /api/dept
 import requests from '@/utils/requests'
 
-export const reqGetDept = (params) => {
+export const reqGetDept = (params = null) => {
   // console.log('@!', params)
   return requests({
     url: '/api/dept',

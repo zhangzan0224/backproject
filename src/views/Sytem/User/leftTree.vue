@@ -6,8 +6,7 @@
       prefix-icon="el-icon-search"
       v-model="filterText"
       clearable
-      @change="search"
-      @clear="clear"
+      @input="search"
     >
     </el-input>
     <!-- 树状图        -->
@@ -64,16 +63,16 @@ export default {
   },
   mounted () {},
   methods: {
-    async clear () {
-      const { content } = await this.$api.department.reqGetDept({})
-      this.treeData = content
-    },
     async search () {
-      const { content } = await this.$api.department.reqGetDept({
-        name: this.filterText
-      })
-      // console.log(content)
-      this.treeData = content
+      if (!this.filterText) {
+        const { content } = await this.$api.department.reqGetDept()
+        this.treeData = content
+      } else {
+        const { content } = await this.$api.department.reqGetDept({
+          name: this.filterText
+        })
+        this.treeData = content
+      }
     },
     async loadNode (node, resolve) {
       // !node.data 得到点击的数据

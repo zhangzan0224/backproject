@@ -2,32 +2,28 @@
   <div class="login">
     <div class="login_form">
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules">
-        <h3 class="title">后台管理系统</h3>
+        <h3 class="title">
+          后台管理系统
+        </h3>
         <el-form-item prop="username" size="small">
           <el-input
-            placeholder="请输入用户名"
-            prefix-icon="iconfont icon-user"
-            v-model="loginForm.username"
-          >
-          </el-input>
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+              prefix-icon="iconfont icon-user" />
         </el-form-item>
         <el-form-item prop="password" size="small">
           <el-input
-            placeholder="请输入密码"
-            prefix-icon="iconfont icon-suo"
-            v-model="loginForm.password"
-            type="password"
-          >
-          </el-input>
+              v-model="loginForm.password"
+              placeholder="请输入密码"
+              prefix-icon="iconfont icon-suo"
+              type="password" />
         </el-form-item>
         <el-form-item size="small" prop="code">
           <el-input
-            placeholder="验证码"
-            prefix-icon="iconfont icon-validCode"
-            v-model="loginForm.code"
-            style="width: 63%"
-          >
-          </el-input>
+              v-model="loginForm.code"
+              placeholder="验证码"
+              prefix-icon="iconfont icon-validCode"
+              style="width: 63%" />
           <div class="login-code" @click="changeAuthCode">
             <img :src="authImg" alt="验证码" />
           </div>
@@ -44,7 +40,8 @@
 </template>
 
 <script>
-import { encrypt } from '@/utils/rsaEncrypt'
+import { encrypt } from '@/utils/rsaEncrypt';
+import { reqBuildMemu } from '@/apis/menus';
 export default {
   name: 'Login',
   data () {
@@ -66,44 +63,49 @@ export default {
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
       authImg: null
-    }
+    };
   },
   methods: {
     // 更换验证码
     async changeAuthCode () {
       // 获取验证码图片信息
-      const { img, uuid } = await this.$api.users.reqAuthCode()
-      this.authImg = img
-      this.loginForm.uuid = uuid
+      const { img, uuid } = await this.$api.users.reqAuthCode();
+      this.authImg = img;
+      this.loginForm.uuid = uuid;
     },
     // 登录
     authLogin () {
       this.$refs.loginFormRef.validate((valid) => {
-        if (!valid) return false
+        if (!valid) return false;
         /**
          * 1 本地存储 localStore seesion cookie
          * 2 json格式化和json转字符串
          */
-        const loginFormCopy = JSON.parse(JSON.stringify(this.loginForm))
+        const loginFormCopy = JSON.parse(JSON.stringify(this.loginForm));
         // 深拷贝用户数据,要不用户的密码会边长
-        loginFormCopy.password = encrypt(this.loginForm.password)
+        loginFormCopy.password = encrypt(this.loginForm.password);
         this.$api.users
           .reqAuthLogin(loginFormCopy)
           .then((res) => {
             // console.log(res)
-            localStorage.setItem('token', res.token)
-            localStorage.setItem('user', JSON.stringify(res.user))
-            this.$router.push('/')
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('user', JSON.stringify(res.user));
+            // !去获取菜单
+            reqBuildMemu().then((res) => {
+              // 存储到localstore
+              localStorage.setItem('menu', JSON.stringify(res));
+              this.$router.push('/');
+            });
           })
-          .catch((err) => err)
-      })
+          .catch((err) => err);
+      });
     }
   },
   mounted () {
-    this.changeAuthCode()
+    this.changeAuthCode();
   },
   computed: {}
-}
+};
 </script>
 
 <style lang="scss" scoped>

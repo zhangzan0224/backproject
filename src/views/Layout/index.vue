@@ -1,12 +1,12 @@
 <template>
   <div class="layout">
     <el-container style="height: 100vh">
-      <Myaside></Myaside>
+      <Myaside />
       <el-container style="flex-direction: column">
-        <Myheader></Myheader>
-        <Tabs></Tabs>
+        <Myheader />
+        <Tabs />
         <el-main>
-          <router-view></router-view>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -14,22 +14,22 @@
 </template>
 
 <script>
-import { reqBuildMemu } from '@/apis/menus.js'
-import Myaside from '@/views/Layout/Aside'
-import Myheader from '@/views/Layout/Header'
-import Tabs from '@/views/Layout/Tabs'
+import { reqBuildMemu } from '@/apis/menus.js';
+import Myaside from '@/views/Layout/Aside';
+import Myheader from '@/views/Layout/Header';
+import Tabs from '@/views/Layout/Tabs';
 export default {
   data () {
-    return {}
+    return {};
   },
   components: { Myaside, Myheader, Tabs },
   methods: {},
   mounted () {
     reqBuildMemu().then((result) => {
       // console.log(result)
-    })
+    });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

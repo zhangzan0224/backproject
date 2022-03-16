@@ -2,33 +2,29 @@
   <!-- @keyup.enter.native="search" -->
   <div class="leftTree">
     <el-input
-      placeholder="请输入部门名称搜索"
-      prefix-icon="el-icon-search"
-      v-model="filterText"
-      clearable
-      @input="search"
-    >
-    </el-input>
-    <!-- 树状图        -->
+        v-model="filterText"
+        placeholder="请输入部门名称搜索"
+        prefix-icon="el-icon-search"
+        clearable
+        @input="search" />
+    <!-- 树状图  -->
     <el-tree
-      :props="treeProps"
-      :load="loadNode"
-      :data="treeData"
-      lazy
-      ref="tree"
-      node-key="id"
-      @node-click="handleTreeNodeClick"
-      :filter-node-method="filterNode"
-    >
-    </el-tree>
+        ref="tree"
+        :props="treeProps"
+        :load="loadNode"
+        :data="treeData"
+        lazy
+        node-key="id"
+        :filter-node-method="filterNode"
+        @node-click="handleTreeNodeClick" />
   </div>
 </template>
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex';
 // 引入防抖函数
-// import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
 export default {
-  name: 'leftTree',
+  name: 'LeftTree',
   components: {},
   data () {
     return {
@@ -39,11 +35,11 @@ export default {
       treeProps: {
         label: 'name', // 指定节点标签为节点对象的某个属性值
         children: 'hasChildren', // 指定子树为节点对象的某个属性值
-        isLeaf: 'leaf' //! 指定子树为节点对象的某个属性值,需要两个属性可以提前告知tree的节点是否为叶子节点,避免了叶子节点前渲染下拉按钮
+        isLeaf: 'leaf' // ! 指定子树为节点对象的某个属性值,需要两个属性可以提前告知tree的节点是否为叶子节点,避免了叶子节点前渲染下拉按钮
       },
       filterArr: [],
       treeData: []
-    }
+    };
   },
   // 计算属性
   computed: {
@@ -52,35 +48,37 @@ export default {
   watch: {
     // 观察,当它变化时候,tree执行filter
     filterText (val) {
-      this.filterArr = []
-      this.$refs.tree.filter(val)
+      this.filterArr = [];
+      this.$refs.tree.filter(val);
     },
-    filterArr (newval) {
+    /*     filterArr (newval) {
       setTimeout(() => {
-        this.SET_USER_DEPT_IDS(newval)
-      }, 100)
+        this.SET_USER_DEPT_IDS(newval);
+      }, 500);
+    }, */
+    filterArr: {
+      handler: debounce(function (newval) {
+        this.SET_USER_DEPT_IDS(newval);
+      }, 500)
     }
   },
   mounted () {},
   methods: {
-    async search () {
-      if (!this.filterText) {
-        const { content } = await this.$api.department.reqGetDept()
-        this.treeData = content
-      } else {
-        const { content } = await this.$api.department.reqGetDept({
+    search: debounce(async function () {
+      // 判断是否存在filtertext
+      const { content } = this.filterText.length
+        ? await this.$api.department.reqGetDept({
           name: this.filterText
         })
-        this.treeData = content
-      }
-    },
+        : await this.$api.department.reqGetDept();
+      this.treeData = content;
+    }, 500),
     async loadNode (node, resolve) {
       // !node.data 得到点击的数据
       // 复杂写法
       // console.log(resolve)
       // if (node.level === 0) {
       //   const { content } = await this.$api.department.reqGetDept()
-      //   // console.log(content)
       //   setTimeout(() => {
       //     return resolve(content)
       //   }, 100)
@@ -95,32 +93,32 @@ export default {
       try {
         const { content } = await this.$api.department.reqGetDept({
           pid: node.data?.id // !es6的写法,node.data是否存在,存在的话就可以.id,当等级是0的时候,node.data是undefined的,新增链式运算符 https://es6.ruanyifeng.com/#docs/operator,
-        })
+        });
         //   // console.log(content)
         //  延迟展示,否则会出现闪动
         setTimeout(() => {
-          return resolve(content)
-        }, 100)
+          return resolve(content);
+        }, 100);
       } catch (error) {
-        this.$message.error(error.message)
+        this.$message.error(error.message);
       }
     },
 
     // 树状图搜索
     filterNode (value, data, node) {
-      if (!value) return true
+      if (!value) return true;
       if (node.data.name.includes(value)) {
-        this.filterArr.push(node.data.id)
+        this.filterArr.push(node.data.id);
       }
-      return node.data.name.indexOf(value) !== -1
+      return node.data.name.indexOf(value) !== -1;
     },
     ...mapMutations('user', ['SET_USER_DEPT_ID', 'SET_USER_DEPT_IDS']),
     // 树状图点击
     handleTreeNodeClick (data) {
-      this.SET_USER_DEPT_ID(data.id)
+      this.SET_USER_DEPT_ID(data.id);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .leftTree {

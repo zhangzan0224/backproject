@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 1基本结构    构造函数
+      function myPromise(excutor) {
+        let self = this
+        self.status = 'pending' // 状态
+        self.value = null //成功后的返回数据
+        self.reason = null //失败后的原因
+
+        // 7 暂存成功的回调函数
+        self.onFulfilledCallBacks = []
+        self.onRejectedCallBacks = []
+        //返回成功的结果
+        function resolve(value) {
+          // 5 首先判断状态
+          if (self.status === 'pending') {
+            self.value = value // 保存成功的结果
+            self.status = 'fulfilled'
+            // 将每一个值通过回调函数返回出去
+            self.onFulfilledCallBacks.forEach(item => item(value))
+          }
+        }
+        //返回失败的原因
+        function reject(reason) {
+          if (self.status === 'pending') {
+            self.reason = reason // 保存失败的结果
+            self.status = 'rejected'
+            // 9 当状态改变的时候,依次取出值
+            self.onRejectedCallBacks.forEach(item => item(reason))
+          }
+        }
+        // 4 立即执行函数
+        /*         try {
+          excutor && excutor(resolve, reject)
+        } catch (error) {
+          reject(error)
+        } */
+        // 4 立即执行函数
+        excutor && excutor(resolve, reject)
+      }
+      // 2then的方法
+      myPromise.prototype.then = function (onFulfilled, onRejected) {
+        // 6 不管成功与失败都会到then方法,确保传递进来的是方法,如果不是,自定义一个方法
+        onFulfilled =
+          typeof onFulfilled === 'function'
+            ? onFulfilled
+            : function (data) {
+                resolve(data)
+              }
+        onRejected =
+          typeof onRejected === 'function'
+            ? onRejected
+            : function (err) {
+                throw err
+              }
+        // 8 暂存区添加回调函数
+        let self = this
+        if (self.status === 'pending') {
+          self.onFulfilledCallBacks.push(onFulfilled)
+          self.onRejectedCallBacks.push(onRejected)
+        }
+      }
+      // 3 初级调用
+      let demo = new myPromise((resolve, reject) => {
+        console.log('abc')
+        // 开启个异步任务
+        setTimeout(() => {
+          resolve('222')
+        }, 2000)
+      })
+      demo.then(data => {
+        console.log(data)
+      })
+    </script>
+  </body>
+</html>

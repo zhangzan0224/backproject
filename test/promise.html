@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function myPromise(excutor) {
+        let self = this
+        self.status = 'pending'
+        self.value = null
+        self.reason = null
+        self.onFulfilledCallbacks = []
+        self.onRejectedCallbacks = []
+        function resolve(data) {
+          if (self.status === 'pending') {
+            self.value = data
+            self.status = 'fulfilled'
+            self.onFulfilledCallbacks.forEach(item => item(data))
+          }
+        }
+        function reject(reason) {
+          if (self.status === 'pending') {
+            self.reason = reason
+            self.status = 'rejected'
+            self.onRejectedCallbacks.forEach(item => item(reason))
+          }
+        }
+        excutor && excutor(resolve, reject)
+      }
+      myPromise.prototype.then = function (onFulfilled, onRejected) {
+        let self = this
+        // 确保.thn传进来的是两个函数
+        onFulfilled =
+          typeof onFulfilled === 'function'
+            ? onFulfilled
+            : function (data) {
+                resolve(data)
+              }
+        onRejected =
+          typeof onRejected === 'function'
+            ? onRejected
+            : function (err) {
+                throw err
+              }
+        if (self.status === 'pending') {
+          self.onFulfilledCallbacks.push(onFulfilled)
+          self.onRejectedCallbacks.push(onRejected)
+        }
+      }
+      let demo = new myPromise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('zzz')
+        }, 1000)
+      })
+      demo.then(data => console.log(data))
+    </script>
+  </body>
+</html>

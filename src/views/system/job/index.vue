@@ -1,18 +1,20 @@
 <template>
-  <div class="role">角色管理</div>
+  <div class="job">
+    job
+  </div>
 </template>
 <script>
 export default {
   name: '',
   components: {},
   data () {
-    return {}
+    return {};
   },
   // 计算属性
   computed: {},
   watch: {},
   mounted () {},
   methods: {}
-}
+};
 </script>
 <style lang="scss" scoped></style>

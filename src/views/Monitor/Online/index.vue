@@ -1,18 +1,20 @@
 <template>
-  <div class="">在线用户</div>
+  <div class="">
+    在线用户
+  </div>
 </template>
 <script>
 export default {
   name: '',
   components: {},
   data () {
-    return {}
+    return {};
   },
   // 计算属性
   computed: {},
   watch: {},
   mounted () {},
   methods: {}
-}
+};
 </script>
 <style lang="scss" scoped></style>

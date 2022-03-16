@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function getThis() {
+        console.log(this)
+      }
+      // window.getThis()  // window
+      var obj = {
+        getThis,
+      }
+      //obj.getThis() // obj对象
+      // getThis() // window
+
+      /**
+       * 构造函数 内部的this直接指向构造出来的的实例对象
+       */
+
+      // function Girl(name) {
+      //   this.name = name
+      //   console.log(this)
+      // }
+
+      // var tina = new Girl('tina')
+      // console.log(tina)
+
+      var obj = {
+        name: 'tina',
+        getName(age) {
+          console.log(this.name + '芳龄' + age)
+        },
+      }
+      var tina = {
+        name: '女神',
+      }
+      // obj.getName()
+      obj.getName.call(tina, 18)
+      obj.getName.apply(tina, [19])
+      let o = obj.getName.bind(tina)
+      o(30)
+    </script>
+  </body>
+</html>

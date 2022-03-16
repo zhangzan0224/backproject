@@ -3,13 +3,15 @@
     <!-- 打开和关闭菜单 -->
     <div class="header-left">
       <div class="header-left-icon" @click="changeIsCollapse">
-        <i v-if="!isCollapse" class="el-icon-s-fold"></i>
-        <i v-else class="el-icon-s-unfold"></i>
+        <i v-if="!isCollapse" class="el-icon-s-fold" />
+        <i v-else class="el-icon-s-unfold" />
       </div>
       <!-- 面包屑 -->
       <div>
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/' }">主页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">
+            主页
+          </el-breadcrumb-item>
           <el-breadcrumb-item v-if="secondMenu">
             {{ secondMenu }}
           </el-breadcrumb-item>
@@ -21,10 +23,10 @@
     </div>
     <!-- 下拉菜单 -->
     <div class="dropmenu">
-      <i @click="fullScreen" class="el-icon-full-screen my-full-screen"></i>
+      <i class="el-icon-full-screen my-full-screen" @click="fullScreen" />
       <el-dropdown>
         <img src="../../assets/imgs/avatar.png" alt="" />
-        <i class="el-icon-arrow-down el-icon--right"></i>
+        <i class="el-icon-arrow-down el-icon--right" />
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item style="font-size: 10px">个人中心</el-dropdown-item>
           <el-dropdown-item style="font-size: 10px">退出登录</el-dropdown-item>
@@ -34,7 +36,7 @@
   </el-header>
 </template>
 <script>
-import screenfull from 'screenfull/dist/screenfull'
+import screenfull from 'screenfull/dist/screenfull';
 export default {
   name: '',
   components: {},
@@ -42,15 +44,15 @@ export default {
     return {
       isCollapse: false, // 是否折叠
       isFullscreen: false // 默认不全屏
-    }
+    };
   },
   // 计算属性
   computed: {
     secondMenu () {
-      return this.$store.state.secondAndThirdMenu[0]
+      return this.$store.state.secondAndThirdMenu[0];
     },
     thirdMenu () {
-      return this.$store.state.secondAndThirdMenu[1]
+      return this.$store.state.secondAndThirdMenu[1];
     }
   },
   watch: {},
@@ -63,24 +65,24 @@ export default {
         this.$message({
           message: '浏览器不能全屏，安装其他版本试试',
           type: 'warning'
-        })
-        return false
+        });
+        return false;
       }
       // 调用 screenfull.toggle() 可以双向切换全屏与非全屏
-      screenfull.toggle()
+      screenfull.toggle();
       this.$message({
         message: '已全屏',
         type: 'success'
-      })
+      });
     },
     // 更改折叠
     changeIsCollapse () {
-      this.isCollapse = !this.isCollapse
+      this.isCollapse = !this.isCollapse;
       // 通知兄弟组件修改isCollapse属性
-      this.$bus.$emit('changeIsCollapse', this.isCollapse)
+      this.$bus.$emit('changeIsCollapse', this.isCollapse);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 // 头部css

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var obj = {
+        name: 'zs',
+        sayName: function (...args) {
+          let sum = 0
+          for (var i = 0; i < args?.length; i++) {
+            sum += args[i]
+          }
+          return sum
+        },
+      }
+      var d = obj.sayName.call('ls', 1, 2, 3)
+      console.log(d)
+      Function.prototype.myCall = function (objThis, ...args) {
+        // console.log(objThis)
+        // console.log(...args)
+        // console.log(this) // this指向的是obj下的sayName方法
+        Object.prototype.otherThis = this
+        const res = objThis ? objThis.otherThis(...args) : otherThis()
+        console.log(res, 'res')
+        delete Object.prototype.otherThis
+        return res
+      }
+
+      var obj1 = {
+        name: 'ls',
+      }
+      var e = obj.sayName.myCall(obj1, 1, 2, 3)
+      console.log(e)
+    </script>
+  </body>
+</html>

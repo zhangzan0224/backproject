@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // if (value !== null && value !== undefined && value !== '') {
+      //   //...
+      // }
+      // 复制代码`
+      // 吐槽
+
+      // ES6中新出的空值合并运算符了解过吗，要写那么多条件吗？
+      // 如果value为null或者undefined 则返回??右侧的值
+      // if ((value ?? '') !== '') {
+      //   //...
+      // }
+      // 复制代码
+      // if ((value ?? '') !== '') {
+      // }
+      const obj1 = { name: 'zs', id: 1, sex: '男', age: 18, text1: '张三' }
+      const obj2 = { name: 'ls', id: 2, sex: '女', age: 80, text2: '李四' }
+      console.log(obj1)
+      console.log(obj2)
+      console.log(Object.assign(obj1, obj2))
+    </script>
+  </body>
+</html>

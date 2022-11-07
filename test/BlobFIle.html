@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="inputFile" />
+    <script>
+      inputFile.onchange = function (e) {
+        // console.log(e)
+        let file = e.target.files[0]
+        // console.log(file)
+        // var a = document.createElement('a')
+        // a.setAttribute('download', 'my.html')
+        // a.href = URL.createObjectURL(file)
+        // a.click()
+        /**
+         * img的读取方法
+         * 还有一种是fileReader的方法
+         */
+        // var img = new Image()
+        // img.src = URL.createObjectURL(file)
+        // document.body.appendChild(img)
+
+        /**
+         * filereader
+         */
+        var img = new Image()
+        var filereader = new FileReader()
+        document.body.appendChild(img)
+        filereader.onload = function () {
+          img.src = filereader.result
+        }
+        filereader.readAsDataURL(file)
+      }
+    </script>
+  </body>
+</html>

@@ -3,6 +3,9 @@ import axios from 'axios';
 import { Notification } from 'element-ui';
 // 引入router
 import router from '@/router';
+// 导入获取路径中参数功能函数
+import { getQueryString } from './getUrl';
+console.log(getQueryString);
 // 引入请求根路径
 const baseURL = process.env.VUE_APP_BASE_URL;
 // 创建一个axios实例
@@ -11,9 +14,14 @@ const requests = axios.create({
   baseURL
 });
 // ! 配置请求拦截器和响应拦截器,你的请求发给我,必须是合理的请求,不合理的请求,需要驳回,另外响应的不一定是你所需要的.
+const ticket = getQueryString(window.location.href, 'ticket');
+console.log(ticket);
 // 添加请求拦截器
 requests.interceptors.request.use(
   function (config) {
+    const ticket = getQueryString(window.location.href, 'ticket');
+    console.log(ticket);
+    config.headers.ticket = ticket;
     if (localStorage.getItem('token')) {
       config.headers.Authorization = window.localStorage.getItem('token');
     }

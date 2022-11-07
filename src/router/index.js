@@ -54,6 +54,18 @@ const routes = [
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/login')
   },
+
+  {
+    path: '/test',
+    name: 'Test',
+    component: () =>
+      import(/* webpackChunkName: "test" */ '@/views/test/66.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "login" */ '@/views/login')
+  },
   {
     path: '/',
     name: 'Layout',
@@ -76,7 +88,7 @@ const router = new VueRouter({
   routes
 });
 // 设置未登录可以去的页面白名单
-const whiteList = ['/login', '/register'];
+const whiteList = ['/login', '/register', '/test'];
 // 设置路由导航守卫
 router.beforeEach((to, from, next) => {
   // to要去的页面 from从哪里来 next放行

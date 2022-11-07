@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var x = document.documentElement.scrollLeft || document.body.scrollLeft
+      var y = document.documentElement.scrollTop || document.body.scrollTop // 元素滚动的高度 用来计算元素的绝对位置使用
+      // 相对位置为相对于视口的位置 可以通过getBoundingClientRect() api获得
+      // {left,top : 元素左上角相对于视口的位置 ;
+      // right,bottom :元素右下角相对于视口的位置;
+      // width,height :元素算上boder的宽度和高度}
+      var positionX = this.getBoundingClientRect().left + document.documentElement.scrollLeft
+      var positionY = this.getBoundingClientRect().top + document.documentElement.scrollTop
+
+      // clentwidth clientHeight 包含padding不包含border
+      // offsetWidth offsetHeight 包含boder和padding
+      document.documentElement.clientWidth // 视口的宽度
+      document.documentElement.clientHeight // 视口的高度
+    </script>
+  </body>
+</html>

@@ -341,6 +341,7 @@ export default {
             if (this.usersList.length < 1) {
               this.searchParams.page = this.searchParams.page - 1;
             }
+            // 重新获取用户列表数据
             this.getUsersList();
             this.$message({
               type: 'success',

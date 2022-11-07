@@ -8,6 +8,17 @@
   </head>
   <body>
     <script>
+      /**
+       * script start
+asyncpromise.html:12 async1 start
+asyncpromise.html:18 async2
+asyncpromise.html:30 promise1
+asyncpromise.html:36 script end
+asyncpromise.html:14 async1 end
+asyncpromise.html:33 promise2
+asyncpromise.html:24 setTimeout
+       */
+      debugger
       async function async1() {
         console.log('async1 start')
         await async2()

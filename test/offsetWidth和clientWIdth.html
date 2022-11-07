@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" style="margin: 50px">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      #wrapper {
+        width: 200px;
+        height: 200px;
+        background-color: black;
+        padding: 50px;
+        border: 10px solid red;
+        margin: 60px;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <div id="wrapper"></div>
+    <script>
+      /**
+       *ie 10 及10以下,根标签的clientWidth 和 offsetWidth都是指视口的宽度
+       但是在11 和其他的浏览器,offsetWidth不包含外面的margin,当给htmlmargin 的时候,视口的宽度仍为1400px,但是offsetWidth为1300px
+       */
+      console.log(document.documentElement.clientWidth) // 就是为视口做准备的,并不是根标签的可视区域
+      console.log(document.documentElement.offsetWidth) // 根标签的可视区域
+    </script>
+  </body>
+</html>

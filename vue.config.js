@@ -1,3 +1,7 @@
+const path = require('path')
+function resolve (dir) {
+  return path.resolve(__dirname, './', dir)
+}
 module.exports = {
   css: {
     loaderOptions: {
@@ -13,5 +17,17 @@ module.exports = {
         prependData: '@import "~@/style/index.scss";'
       }
     }
+  },
+  chainWebpack (config) {
+    config.module
+      .rule('iconfont')
+      .test(/\.(png|jpg|gif)$/)
+      .include.add(resolve('src/assets/iconfont'))
+      .end()
+      .use('url-loader')
+      .loader('url-loader')
+      .options({
+      })
+      .end()
   }
 };

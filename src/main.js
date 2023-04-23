@@ -1,3 +1,11 @@
+/*
+ * @Description:
+ * @Version: 2.0
+ * @Author: ZhangZan
+ * @Date: 2023-04-23 14:03:14
+ * @LastEditors: ZhangZan
+ * @LastEditTime: 2023-04-23 14:11:27
+ */
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
@@ -14,7 +22,7 @@ import API from '@/apis';
 import permission from '@/utils/permission';
 // 引入loading插件
 import loading from '@/views/loading/loading';
-import '@/assets/iconfont/iconfont.css' // permission control
+// import '@/assets/iconfont/iconfont.css' // permission control
 // import 'vue-city-bspicker'
 
 Vue.use(loading);

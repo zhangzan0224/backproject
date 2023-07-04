@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div
       ref="reference"
       v-clickoutside="() => toggleDropDownVisible(false)"
@@ -698,4 +698,4 @@ export default {
     }
   }
 };
-</script>
+</script> -->

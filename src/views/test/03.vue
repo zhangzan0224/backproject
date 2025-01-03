@@ -78,7 +78,7 @@ export default {
           diagnosisDesc: '古典生物型霍乱',
           mtsDiagnosisCode: '',
           mtsDiagnosisDesc: '',
-          scope: '1',
+          scope: '2',
           sourceType: '6',
           sourceTypeDesc: '人工填写诊断（代理人）',
           index: 4
@@ -92,7 +92,7 @@ export default {
           diagnosisDesc: '霍乱',
           mtsDiagnosisCode: '',
           mtsDiagnosisDesc: '',
-          scope: '1',
+          scope: '2',
           sourceType: '6',
           sourceTypeDesc: '人工填写诊断（代理人）',
           index: 5
@@ -106,7 +106,7 @@ export default {
           diagnosisDesc: '测试',
           mtsDiagnosisCode: '',
           mtsDiagnosisDesc: '',
-          scope: '1',
+          scope: '2',
           sourceType: '6',
           sourceTypeDesc: '人工填写诊断（代理人）',
           index: 6
@@ -120,7 +120,7 @@ export default {
           diagnosisDesc: '霍乱，由于O1群霍乱弧菌，霍乱生物型所致',
           mtsDiagnosisCode: '',
           mtsDiagnosisDesc: '',
-          scope: '1',
+          scope: '2',
           sourceType: '6',
           sourceTypeDesc: '人工填写诊断（代理人）',
           index: 7
@@ -209,7 +209,7 @@ export default {
       } else if (columnIndex === 1) { // 针对 sourceTypeDesc 列进行判断
         const currentRow = this.tableData[rowIndex]
         const previousRow = this.tableData[rowIndex - 1]
-        if (rowIndex > 0 && currentRow.sourceTypeDesc === previousRow.sourceTypeDesc) {
+        if (rowIndex > 0 && currentRow.sourceTypeDesc === previousRow.sourceTypeDesc && currentRow.scope === previousRow.scope) {
           // 如果当前行与上一行的 sourceTypeDesc 相同，合并当前行的第一列
           return { rowspan: 0, colspan: 0 } // 当前行的 sourceTypeDesc 列不显示
         }
@@ -217,7 +217,7 @@ export default {
         let rowspan = 1
         // 计算连续相同 sourceTypeDesc 的行数
         for (let i = rowIndex + 1; i < this.tableData.length; i++) {
-          if (this.tableData[i].sourceTypeDesc === currentRow.sourceTypeDesc) {
+          if (this.tableData[i].sourceTypeDesc === currentRow.sourceTypeDesc && this.tableData[i].scope === currentRow.scope) {
             rowspan++
           } else {
             break
@@ -227,6 +227,46 @@ export default {
       }
       return { rowspan: 1, colspan: 1 } // 其他列不合并
     }
+    // objectSpanMethod({ rowIndex, columnIndex }) {
+    //   if (columnIndex === 0) {
+    //     const currentRow = this.tableData[rowIndex]
+    //     const previousRow = this.tableData[rowIndex - 1]
+    //     if (rowIndex > 0 && currentRow.district === previousRow.district) {
+    //       return { rowspan: 0, colspan: 0 }
+    //     }
+    //     let rowspan = 1
+    //     for (let i = rowIndex + 1; i < this.tableData.length; i++) {
+    //       if (this.tableData[i].district === currentRow.district) {
+    //         rowspan++
+    //       } else {
+    //         break
+    //       }
+    //     }
+    //     return { rowspan, colspan: 1 }
+    //   } else if (columnIndex === 1) {
+    //     const currentRow = this.tableData[rowIndex]
+    //     const previousRow = this.tableData[rowIndex - 1]
+
+    //     if (rowIndex > 0 &&
+    //       currentRow.sourceTypeDesc === previousRow.sourceTypeDesc &&
+    //       currentRow.scope === previousRow.scope) {
+    //       return { rowspan: 0, colspan: 0 }
+    //     }
+
+    //     let rowspan = 1
+    //     for (let i = rowIndex + 1; i < this.tableData.length; i++) {
+    //       if (
+    //         this.tableData[i].sourceTypeDesc === currentRow.sourceTypeDesc &&
+    //         this.tableData[i].scope === currentRow.scope) {
+    //         rowspan++
+    //       } else {
+    //         break
+    //       }
+    //     }
+    //     return { rowspan, colspan: 1 }
+    //   }
+    //   return { rowspan: 1, colspan: 1 }
+    // }
   }
 }
 </script>

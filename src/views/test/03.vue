@@ -1,9 +1,10 @@
 <template>
   <div style="padding:20px">
-    <el-table :data="tableData6" :span-method="objectSpanMethod" border>
-      <el-table-column prop="district" label="district" width="180" />
+    <el-table :data="tableData" :span-method="objectSpanMethod" border>
+      <el-table-column prop="district" label="district" />
       <el-table-column prop="sourceTypeDesc" label="姓名" />
-      <el-table-column prop="diagnosisCode" label="数值 1（元）" />
+      <el-table-column prop="diagnosisCode" label="111" />
+      <el-table-column prop="diagnosisDesc" label="2222" />
     </el-table>
   </div>
 </template>
@@ -11,8 +12,7 @@
 export default {
   data () {
     return {
-      spanArr: [], // 用于存放每一行记录的合并数
-      tableData6: [
+      tableData: [
         {
           district: '案件使用区',
           caseno: '662211001545',
@@ -185,18 +185,48 @@ export default {
     };
   },
   methods: {
-    objectSpanMethod ({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0 || columnIndex === 1) {
-        const _row = this.spanArr[rowIndex];
-        const _col = _row > 0 ? 1 : 0;
-        console.log(`rowspan:${_row} colspan:${_col}`);
-        return {
-          // [0,0] 表示这一行不显示， [2,1]表示行的合并数
-          rowspan: _row,
-          colspan: _col
-        };
+    // 帮我写一个方法实现第一列根据district合并，第二列合并的前提是district是一样的
+    objectSpanMethod ({ rowIndex, columnIndex }) {
+      // 第一列如果district都一样进行合并
+      if (columnIndex === 0) {
+        const currentRow = this.tableData[rowIndex]
+        const previousRow = this.tableData[rowIndex - 1]
+        if (rowIndex > 0 && currentRow.district === previousRow.district) {
+          // 如果当前行与上一行的 district 相同，合并当前行的第一列
+          return { rowspan: 0, colspan: 0 } // 当前行的 district 列不显示
+        }
+        // 如果当前行与上一行的 district 不同，则显示当前行的 district
+        let rowspan = 1
+        // 计算连续相同 district 的行数
+        for (let i = rowIndex + 1; i < this.tableData.length; i++) {
+          if (this.tableData[i].district === currentRow.district) {
+            rowspan++
+          } else {
+            break
+          }
+        }
+        return { rowspan, colspan: 1 } // 返回合并后的行数
+      } else if (columnIndex === 1) { // 针对 sourceTypeDesc 列进行判断
+        const currentRow = this.tableData[rowIndex]
+        const previousRow = this.tableData[rowIndex - 1]
+        if (rowIndex > 0 && currentRow.sourceTypeDesc === previousRow.sourceTypeDesc) {
+          // 如果当前行与上一行的 sourceTypeDesc 相同，合并当前行的第一列
+          return { rowspan: 0, colspan: 0 } // 当前行的 sourceTypeDesc 列不显示
+        }
+        // 如果当前行与上一行的 sourceTypeDesc 不同，则显示当前行的 sourceTypeDesc
+        let rowspan = 1
+        // 计算连续相同 sourceTypeDesc 的行数
+        for (let i = rowIndex + 1; i < this.tableData.length; i++) {
+          if (this.tableData[i].sourceTypeDesc === currentRow.sourceTypeDesc) {
+            rowspan++
+          } else {
+            break
+          }
+        }
+        return { rowspan, colspan: 1 } // 返回合并后的行数
       }
+      return { rowspan: 1, colspan: 1 } // 其他列不合并
     }
   }
-};
+}
 </script>

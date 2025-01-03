@@ -1,4 +1,5 @@
 const path = require('path')
+
 function resolve (dir) {
   return path.resolve(__dirname, './', dir)
 }
@@ -26,8 +27,8 @@ module.exports = {
       .end()
       .use('url-loader')
       .loader('url-loader')
-      .options({
-      })
+      .options({})
       .end()
-  }
+  },
+  lintOnSave: false
 };

@@ -4,11 +4,14 @@
   </div>
 </template>
 <script>
+
 export default {
   name: '',
   components: {},
   data () {
-    return {};
+    return {
+      reg: /.+/
+    };
   },
   // 计算属性
   computed: {},

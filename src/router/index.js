@@ -4,7 +4,9 @@ import VueRouter from 'vue-router';
 import store from '@/store';
 import Layout from '@/views/Layout';
 // 重新修改路由数据
-import { rebulidMenu } from '@/utils/rebulidMenu';
+import {
+  rebulidMenu
+} from '@/utils/rebulidMenu';
 Vue.use(VueRouter);
 // 需要重写VueRouter.prototype原型对象身上的push|replace方法
 // 先把VueRouter.prototype身上的push|replace方法进行保存一份
@@ -48,40 +50,37 @@ Vue.prototype.push = function (location) {
 Vue.prototype.replace = function (location) {
   return originReplace.call(this, location).catch((error) => error);
 };
-const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/login')
-  },
+const routes = [{
+  path: '/login',
+  name: 'Login',
+  component: () => import(/* webpackChunkName: "login" */ '@/views/login')
+},
 
-  {
-    path: '/test',
-    name: 'Test',
-    component: () =>
-      import(/* webpackChunkName: "test" */ '@/views/test/02.vue')
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/login')
-  },
-  {
-    path: '/',
-    name: 'Layout',
-    component: Layout,
-    redirect: '/home',
-    children: [
-      {
-        path: '/home',
-        name: 'Home',
-        meta: {
-          title: '主页'
-        },
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home')
-      }
-    ]
-  }
+{
+  path: '/test',
+  name: 'Test',
+  component: () =>
+    import(/* webpackChunkName: "test" */ '@/views/test/03.vue')
+},
+{
+  path: '/login',
+  name: 'Login',
+  component: () => import(/* webpackChunkName: "login" */ '@/views/login')
+},
+{
+  path: '/',
+  name: 'Layout',
+  component: Layout,
+  redirect: '/home',
+  children: [{
+    path: '/home',
+    name: 'Home',
+    meta: {
+      title: '主页'
+    },
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Home')
+  }]
+}
 ];
 
 const router = new VueRouter({
@@ -95,7 +94,9 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
   if (token) {
     if (to.path === '/login') {
-      next({ path: '/home' });
+      next({
+        path: '/home'
+      });
     } else {
       // 需判断是否存在菜单,没有就去加载菜单
       if (!store.state.menu.length) {
@@ -140,6 +141,8 @@ function loadMenus (to, next) {
     component: (resolve) => require(['@/views/404'], resolve)
   });
   // console.log('to.path', to.path);
-  next({ path: to.path });
+  next({
+    path: to.path
+  });
 }
 export default router;
